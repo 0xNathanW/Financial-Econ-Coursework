@@ -1,18 +1,29 @@
 import statsmodels.api as sm
+from statsmodels.tools.tools import add_constant
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("./CleanData.csv")
-depVar = df["Gearing (%)"]
+df = pd.read_csv("./RegressionData.csv")
+df = add_constant(df)
+depVar = df["Gearing (%)2018"]
 
 
-def run_regression(*independentVars):
+def run_regression(interestVar):
     """
     Runs a regression on the data.
     Prints summary
 
     """
-    indVars = [var for var in independentVars]
+    # Add a constant to the data
+    indVars = [
+        "const",
+        interestVar,
+        "Asset Tangability Avg",
+        "Log Sales Avg",
+        "TobinsQ Avg",
+        "Profitability Avg",
+        "NDTS Avg",
+    ]
     results = sm.OLS(endog=depVar, exog=df[indVars]).fit()
 
     print("\n\n", results.summary())
@@ -22,12 +33,8 @@ def run_regression(*independentVars):
     plt.show()
     
 
-run_regression(
-    "Asset Tangibility", 
-    "Log Sales", 
-    "Profit margin (%)", 
-    "Directors' Remuneration",
-    "BvD Independence Indicator"
-    )
+run_regression("Directors' Fees Avg")
 
-    
+run_regression("Directors Remuneration Avg")
+
+run_regression("Highest Paid Director Avg")    
