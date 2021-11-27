@@ -7,6 +7,9 @@ import statsmodels.graphics.regressionplots as smgr
 
 df = pd.read_csv("./RegressionData.csv")
 
+pd.options.display.width = 0
+print("\n\n", df.describe().round(2), "\n\n")
+
 
 def run_regression(targetVar, influence=False, plot=False):
     """
@@ -15,7 +18,7 @@ def run_regression(targetVar, influence=False, plot=False):
 
     """
     results = smf.ols(
-        formula=f"""Gearing
+        formula=f"""Gearing_Long
         ~ {targetVar}
         + Size
         + Asset_Tangability
@@ -26,7 +29,7 @@ def run_regression(targetVar, influence=False, plot=False):
     print("\n\n", results.summary())
     if plot: 
         fig = sm.graphics.plot_partregress_grid(results)
-        fig.tight_layout(pad=1.0)
+        fig.tight_layout()
         plt.show()
     #print(results.get_influence().summary_table())
     if influence:
@@ -34,4 +37,4 @@ def run_regression(targetVar, influence=False, plot=False):
         plt.show()
 
 
-run_regression("Ownership_Concentrated", plot=True)
+#run_regression("Ownership_Concentrated", plot=True)
